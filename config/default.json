@@ -1,0 +1,7 @@
+{
+    "name": "Vidly",
+    "jwtPrivateKey":"",
+    "port" : "",
+    "inputPath": "",
+    "outputPath": ""
+}

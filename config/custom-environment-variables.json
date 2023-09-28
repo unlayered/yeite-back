@@ -1,0 +1,7 @@
+{
+    "database-uri": "DATABASE_URI",
+    "jwtPrivateKey": "VIDLY_JWT_PRIVATE_KEY",
+    "port":"PORT",
+    "inputPath": "AUDIO_INPUT_PATH",
+    "outputPath": "AUDIO_OUTPUT_PATH"
+}
