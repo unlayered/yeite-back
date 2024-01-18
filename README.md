@@ -1,2 +1,2 @@
 # Yeite-back
-Una app de producción musicañl
+Una app de producción musical
