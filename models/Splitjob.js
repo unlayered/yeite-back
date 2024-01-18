@@ -10,7 +10,7 @@ const splitjobSchema = new mongoose.Schema({
   duration: { type: Number, required: false, min: 0 },
 });
 
-const Splitjob = mongoose.model("Splitjob", splitjobSchema, "Notify");
+const Splitjob = mongoose.model("Splitjob", splitjobSchema, "splitJobs");
 
 function validateSplitjob(splitjob) {
   const schema = Joi.object({

@@ -1,7 +1,7 @@
 {
-    "database-uri": "DATABASE_URI",
-    "jwtPrivateKey": "VIDLY_JWT_PRIVATE_KEY",
+    "database-uri": "YEITE_DATABASE_URI",
+    "jwtPrivateKey": "YEITE_JWT_PRIVATE_KEY",
     "port":"PORT",
-    "inputPath": "AUDIO_INPUT_PATH",
-    "outputPath": "AUDIO_OUTPUT_PATH"
+    "inputPath": "YEITE_INPUT_PATH",
+    "outputPath": "YEITE_OUTPUT_PATH"
 }

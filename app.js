@@ -1,4 +1,5 @@
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const config = require("config");
 const https = require("https");
 const fs = require("fs");

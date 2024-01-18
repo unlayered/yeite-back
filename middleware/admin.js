@@ -3,6 +3,3 @@ module.exports = function (req, res, next) {
     return res.status(403).send("Access denied. No admin privileges.");
   next();
 };
-
-//401 Unauthorized
-//403 Forbidden

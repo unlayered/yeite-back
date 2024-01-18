@@ -1,4 +1,4 @@
-const auth = require("../middleware/auth");
+const auth = require("../middleware/auth.js");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const express = require("express");
