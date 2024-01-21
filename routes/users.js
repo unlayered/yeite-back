@@ -1,13 +1,15 @@
-const auth = require("../middleware/auth.js");
-const admin = require("../middleware/admin.js");
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
-const { User, validate } = require("../models/User.js");
+import auth from "../middleware/auth.js";
+import admin from "../middleware/admin.js";
+import * as _ from "lodash";
+import bcrypt from "bcrypt";
+import express from "express";
+import mongoose from "mongoose";
+import { User, validateUser } from "../models/User.js";
 
-const debug = require("debug")("app:users");
+import debug from "debug";
+debug("app:users");
+
+const router = express.Router();
 
 router.get("/", async (req, res) => {
   const user = await User.find().sort({ name: 1 });
@@ -73,4 +75,4 @@ router.delete("/:id", [auth, admin], async (req, res) => {
   res.send(user);
 });
 
-module.exports = router;
+export default router;

@@ -1,12 +1,14 @@
-const _ = require("lodash");
-const Joi = require("joi");
-const bcrypt = require("bcrypt");
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
-const { User } = require("../models/User.js");
+import * as _ from "lodash";
+import Joi from "joi";
+import bcrypt from "bcrypt";
+import express from "express";
+import mongoose from "mongoose";
+import { User } from "../models/User.js";
 
-const debug = require("debug")("app:auth");
+import debug from "debug";
+debug("app:auth");
+
+const router = express.Router();
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -30,4 +32,4 @@ function validate(req) {
   return schema.validate(req);
 }
 
-module.exports = router;
+export default router;

@@ -1,32 +1,39 @@
-const dotenv = require("dotenv");
-dotenv.config();
-const config = require("config");
-const https = require("https");
-const fs = require("fs");
-const express = require("express");
-const cors = require("cors");
-const winston = require("winston");
-const path = require("path");
-const debug = require("debug")("app:startup");
+import "./startup/env.js";
+import config from "config";
+import https from "https";
+import fs from "fs";
+import express from "express";
+import cors from "cors";
+import winston from "winston";
+import path from "path";
+import debug from "debug"
+
+import configure from './startup/config.js'
+import logging from './startup/logging.js'
+import routes from './startup/routes.js'
+import database from './startup/db.js'
+import customValidation from "./startup/validation.js"
 
 // SAFECHECK CONFIGURACIONES NECESARIAS
-require("./startup/config")();
+configure();
 
 const app = express();
-app.use(
-  "/output",
-  express.static(config.get("outputPath"), {
-    setHeaders: function (res, path, stat) {
-      res.set("Access-Control-Allow-Origin", "*");
-    },
-  })
-);
+
+// app.use(
+//   "/output",
+//   express.static(config.get("outputPath"), {
+//     setHeaders: function (res, path, stat) {
+//       res.set("Access-Control-Allow-Origin", "*");
+//     },
+//   })
+// );
+
 app.use(cors());
 
-require("./startup/logging")();
-require("./startup/routes")(app);
-require("./startup/db")();
-//require("./startup/validation")();
+logging();
+routes(app);
+database();
+customValidation();
 
 app.listen(config.get("port"), () => {
   winston.info(`App listening on port ${config.get("port")}`);

@@ -1,18 +1,22 @@
-const express = require("express");
-const split = require("../routes/split");
-const users = require("../routes/users");
-const auth = require("../routes/auth");
+import express from "express";
+//import split from "../routes/split";
+import users from "../routes/users.js";
+import auth from "../routes/auth.js";
+import audio from "../routes/audio.js";
+import track from "../routes/track.js";
 
-const errorLogs = require("../middleware/error");
+import errorLogs from "../middleware/error.js";
 
-module.exports = function (app) {
+export default function (app) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));
 
   app.use("/api/users", users);
+  app.use("/api/audio", audio);
+  app.use("/api/track", track);
   app.use("/api/auth", auth);
-  app.use("/split", split);
+  //app.use("/split", split);
 
   /* ERROR HANDLING MIDDLEWARE*/
   app.use(errorLogs);
