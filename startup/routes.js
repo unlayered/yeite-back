@@ -1,9 +1,11 @@
 import express from "express";
+
 //import split from "../routes/split";
 import users from "../routes/users.js";
 import auth from "../routes/auth.js";
 import audio from "../routes/audio.js";
 import track from "../routes/track.js";
+import stem from "../routes/stem.js";
 
 import errorLogs from "../middleware/error.js";
 
@@ -16,6 +18,7 @@ export default function (app) {
   app.use("/api/audio", audio);
   app.use("/api/track", track);
   app.use("/api/auth", auth);
+  app.use("/api/stem", stem);
   //app.use("/split", split);
 
   /* ERROR HANDLING MIDDLEWARE*/

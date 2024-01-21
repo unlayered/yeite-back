@@ -14,7 +14,7 @@ const StemSchema = new mongoose.Schema({
     trim: true,
     required: true
   }
-})
+});
 
 const AudioSchema = new mongoose.Schema({
   name: {
@@ -31,11 +31,6 @@ const AudioSchema = new mongoose.Schema({
     maxlength:255,
     trim: true
   },
-  stem: {
-    type: Number,
-    min: 0,
-    max: 10
-  },
   stems : [StemSchema],
   bpm : {
     type: Number,
@@ -49,7 +44,6 @@ const AudioSchema = new mongoose.Schema({
 
 const Audio = mongoose.model("audios", AudioSchema);
 
-
 function validateAudio(audio) {
 
   const stemSchema = Joi.object({
@@ -60,7 +54,6 @@ function validateAudio(audio) {
   const audioSchema = Joi.object({
     name: Joi.string().min(2).max(255).required(),
     url: Joi.string().dataUri().min(5).max(255),
-    stem: Joi.number().min(0).max(10).required(),
     stems: Joi.array().items( stemSchema ),
     bpm: Joi.number().min(0),
   });
