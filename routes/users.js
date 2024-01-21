@@ -1,6 +1,6 @@
 import auth from "../middleware/auth.js";
 import admin from "../middleware/admin.js";
-import * as _ from "lodash";
+import _ from "lodash";
 import bcrypt from "bcrypt";
 import express from "express";
 import mongoose from "mongoose";

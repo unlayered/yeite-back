@@ -1,5 +1,5 @@
 import auth from "../middleware/auth.js";
-import * as _ from "lodash";
+import _ from "lodash";
 import express from "express";
 import mongoose from "mongoose";
 import { Track, validatePost, validatePut } from "../models/Track.js";
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
 
 router.get("/me", auth, async (req, res) => {
   const tracks = await Track.find({author: req.user._id}).populate('audio').populate('author');
-  if (!tracks) return res.status(404).send("The user was not found");
+  if (!tracks) return res.status(404).send("The track was not found");
   res.send(tracks);
 });
 
@@ -24,18 +24,18 @@ router.get("/:id", async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id))
     return res.status(400).send('The id is invalid.')
   const track = await Track.findById( req.params.id ).populate('audio').populate('author');
-  if (!track) return res.status(404).send("The user was not found");
+  if (!track) return res.status(404).send("The track was not found");
   res.send(track);
 });
 
 router.get("/author/:id", auth, async (req, res) => {
   const tracks = await Track.find({author: req.params.id}).populate('audio').populate('author');
-  if (!tracks) return res.status(404).send("The user was not found");
+  if (!tracks) return res.status(404).send("The track was not found");
   res.send(tracks);
 });
 
 router.post("/", auth, async (req, res) => {
-  const { error } = validate(req.body);
+  const { error } = validatePost(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const track = new Track(
@@ -48,14 +48,14 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.put("/:id", auth, async (req, res) => {
-  const { error } = validatePost(req.body);
+  const { error } = validatePut(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const track = await Track.findByIdAndUpdate(
     req.params.id,
     _.pick(req.body, ["title", "metadata"]),
     { new: true }
-  );
+  ).populate('audio');
 
   if (!track) return res.status(404).send("The track was not found");
   res.send(track);

@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import _ from "lodash";
 import Joi from "joi";
 import bcrypt from "bcrypt";
 import express from "express";
