@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 router.get("/me", auth, async (req, res) => {
   const audios = await Audio.find({author: req.user._id});
   if (!audios) return res.status(404).send("The user was not found");
-  res.send(audios);
+  res.send({ total: audios.length, items: audios });
 });
 
 router.get("/:id", async (req, res) => {
@@ -31,7 +31,7 @@ router.get("/:id", async (req, res) => {
 router.get("/author/:id", auth, async (req, res) => {
   const audios = await Audio.find({author: req.params.id});
   if (!audios) return res.status(404).send("The user was not found");
-  res.send(audios);
+  res.send({ total: audios.length, items: audios });
 });
 
 router.post("/", auth, async (req, res) => {

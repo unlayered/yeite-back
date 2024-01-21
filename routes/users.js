@@ -12,8 +12,8 @@ debug("app:users");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const user = await User.find().sort({ name: 1 });
-  res.send(user);
+  const users = await User.find().sort({ name: 1 });
+  res.send({ total: users.length, items: users });
 });
 
 router.get("/me", auth, async (req, res) => {
