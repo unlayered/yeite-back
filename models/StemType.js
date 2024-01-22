@@ -16,12 +16,12 @@ const StemTypeSchema = new mongoose.Schema({
     }
 });
 
-const StemType = mongoose.model("stems", StemTypeSchema);
+const StemType = mongoose.model("stemTypes", StemTypeSchema);
 
 function validate( stemType ) {
     const schema = Joi.object({
         name: Joi.string().min(2).max(32).required(),
-        type: Joi.string()
+        type: Joi.string().min(2).max(32).required()
     });
 
     return schema.validate(stemType, {allowUnknown: true});

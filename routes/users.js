@@ -3,8 +3,7 @@ import admin from "../middleware/admin.js";
 import _ from "lodash";
 import bcrypt from "bcrypt";
 import express from "express";
-import mongoose from "mongoose";
-import { User, validateUser } from "../models/User.js";
+import { User, validate } from "../models/User.js";
 
 import debug from "debug";
 debug("app:users");

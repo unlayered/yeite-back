@@ -1,43 +1,56 @@
-const auth = require("../middleware/auth");
-const multerWare = require("../middleware/multer");
-const _ = require("lodash");
-const express = require("express");
-const config = require("config");
-const winston = require("winston");
-const path = require("path");
-const fs = require("fs");
+import auth from "../middleware/auth.js";
+import mongoose from "mongoose";
+import _ from "lodash";
+import express from "express";
+import { Splitjob, validate } from "../models/Splitjob.js";
+
+//import winston from "winston";
+//import path from "path";
+//import fs from "fs";
+//import multer from "multer";
+//import { findFiles: listFiles, findByName } from "../utils/fileUtils";
+//import multerWare from "../middleware/multer";
+
 const router = express.Router();
-const { findFiles: listFiles, findByName } = require("../utils/fileUtils");
-const { Splitjob, validate } = require("../models/Splitjob");
-const multer = require("multer");
 
-router.get("/:id", async (req, res) => {
-  //Search job by id & userId
-  const timestamp = req.params.id;
-  try {
-    //await findByName(config.get("outputPath"), timestamp);
-    const folderPath = path.join(config.get("outputPath"), timestamp);
-    const files = await listFiles(folderPath);
+router.get('/', auth, async (req,res) => {
+  const splitJobs = await Splitjob.find();
+  res.status(200).send({ total: splitJobs.length, items: splitJobs });
+})
 
-    Splitjob.findOne({ timestamp })
-      .then((doc) => {
-        const fullPaths = files.map((file) => `output/${timestamp}/${file}`);
-        doc = doc.toJSON();
-        doc.urls = fullPaths;
-        res.send(doc);
-      })
-      .catch((err) => console.error(err));
-  } catch (err) {
-    res.status(404).send("Job not found");
-    console.log("No se encontraron los archivos", err);
-  }
-});
+router.get('/:id', auth, async (req,res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id))
+    return res.status(400).send('The id is invalid.')
+  const splitJob = await Splitjob.findById( req.params.id ).populate('user', ['-password', '-isAdmin']).populate('audio');
+  if (!splitJob) return res.status(404).send("The split job was not found");
+  res.send(splitJob);
+})
 
-router.get("/", async (req, res) => {
-  //Search all jobs
-  const jobs = await Splitjob.find();
-  res.send(jobs);
-});
+router.post('/', auth, async (req,res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const splitJob = new Splitjob(
+      { ..._.pick(req.body, ["audio", "stems"]), user: req.user._id}
+  )
+  
+  await splitJob.save();
+
+  res.send(splitJob);
+})
+
+router.delete('/:id', auth, async (req,res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id))
+    return res.status(400).send('The id is invalid.')
+  
+  const splitJob = await Splitjob.findByIdAndRemove( req.params.id );
+  if (!splitJob) return res.status(404).send("The split job was not found");
+  res.send(splitJob);
+})
+
+export default router;
+
+/*
 
 router.post("/", async (req, res) => {
   multerWare.single("file")(req, res, async function (err) {
@@ -110,7 +123,7 @@ router.post("/", async (req, res) => {
 
 function runPy(path, ...args) {
   return new Promise(function (success, nosuccess) {
-    const { spawn } = require("child_process");
+    import { spawn } from "child_process";
     const pyprog = spawn("python", [path, ...args]);
 
     pyprog.stdout.on("data", function (data) {
@@ -126,6 +139,35 @@ function runPy(path, ...args) {
 function trimExtension(filename) {
   return filename.replace(/\.[^/.]+$/, "");
 }
+
+router.get("/:id", async (req, res) => {
+  //Search job by id & userId
+  const timestamp = req.params.id;
+  try {
+    //await findByName(config.get("outputPath"), timestamp);
+    const folderPath = path.join(config.get("outputPath"), timestamp);
+    const files = await listFiles(folderPath);
+
+    Splitjob.findOne({ timestamp })
+      .then((doc) => {
+        const fullPaths = files.map((file) => `output/${timestamp}/${file}`);
+        doc = doc.toJSON();
+        doc.urls = fullPaths;
+        res.send(doc);
+      })
+      .catch((err) => console.error(err));
+  } catch (err) {
+    res.status(404).send("Job not found");
+    console.log("No se encontraron los archivos", err);
+  }
+});
+
+router.get("/", async (req, res) => {
+  //Search all jobs
+  const jobs = await Splitjob.find();
+  res.send(jobs);
+});
+
 
 router.put("/:id", async (req, res) => {});
 
@@ -146,5 +188,4 @@ router.delete("/:id", async (req, res) => {
 
   res.send(job);
 });
-
-module.exports = router;
+*/

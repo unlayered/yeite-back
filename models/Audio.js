@@ -3,9 +3,8 @@ import mongoose from "mongoose";
 
 const StemSchema = new mongoose.Schema({
   layer : {
-    type: String,
-    enum: ["Drums", "Vocals", "Guitars", "Keyboard", "Bass"],
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'stemTypes',
   },
   url: {
     type: String,
@@ -26,7 +25,6 @@ const AudioSchema = new mongoose.Schema({
   },
   url: {
     type: String,
-    required: false,
     minlength: 5,
     maxlength:255,
     trim: true
@@ -36,15 +34,15 @@ const AudioSchema = new mongoose.Schema({
     type: Number,
     min: 0,
   },
-  author : [{
+  author : {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
-  }]
+  }
 });
 
 const Audio = mongoose.model("audios", AudioSchema);
 
-function validateAudio(audio) {
+function validate(audio) {
 
   const stemSchema = Joi.object({
     name: Joi.string().min(2).max(255).required(),
@@ -61,7 +59,7 @@ function validateAudio(audio) {
 }
 
 export {
-  validateAudio,
+  validate,
   AudioSchema,
   Audio
 }

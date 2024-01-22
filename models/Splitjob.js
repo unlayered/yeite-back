@@ -1,29 +1,46 @@
-const mongoose = require("mongoose");
-const Joi = require("joi");
+import mongoose from "mongoose";
+import Joi from "joi";
 
-const splitjobSchema = new mongoose.Schema({
-  name: { type: String, required: true, minlength: 1, maxlength: 255 },
-  timestamp: { type: String, required: true, minlength: 1, maxlength: 255 },
-  status: { type: String, required: true, minlength: 1, maxlength: 255 },
-  stems: { type: Number, required: true, min: 2, max: 5 },
-  offset: { type: Number, required: false, min: 0, default: 0 },
-  duration: { type: Number, required: false, min: 0 },
-});
+const SplitJobSchema = new mongoose.Schema({
+  user : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
+    required: true
+  },
+  audio: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'audios',
+    required: true
+  },
+  status: {
+    type: String,
+    enum: ["pending", "started", "processed", "failed"],
+    default: "pending",
+    required: true,
+  },
+  stems: {
+    type: Number,
+    required: true,
+    min: 2,
+    max: 5
+  },
+}, {timestamps: true});
 
-const Splitjob = mongoose.model("Splitjob", splitjobSchema, "splitJobs");
+const Splitjob = mongoose.model("splitjobs", SplitJobSchema);
 
-function validateSplitjob(splitjob) {
+function validate(splitjob) {
   const schema = Joi.object({
     //status: Joi.string().min(3).max(50).required(),
     //inputUrl: Joi.string().uri().max(50).required(),
     //outputUrl: Joi.string().uri().max(50).required(),
-    name: Joi.string().min(1).max(50).required(),
     stems: Joi.number().min(2).max(5).required(),
-    file: Joi.required(),
+    audio: Joi.objectId()
   });
   return schema.validate(splitjob);
 }
 
-exports.splitjobSchema = splitjobSchema;
-exports.Splitjob = Splitjob;
-exports.validate = validateSplitjob;
+export {
+  SplitJobSchema,
+  Splitjob,
+  validate
+}

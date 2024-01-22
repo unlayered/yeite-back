@@ -2,7 +2,7 @@ import auth from "../middleware/auth.js";
 import _ from "lodash";
 import express from "express";
 import mongoose from "mongoose";
-import { Audio, validateAudio } from "../models/Audio.js";
+import { Audio, validate } from "../models/Audio.js";
 
 import debug from "debug";
 debug("app:users");

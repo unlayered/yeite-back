@@ -1,5 +1,6 @@
 import Joi from "joi";
 import mongoose from "mongoose";
+import { makeSchemaFieldsOptional } from "../startup/validation.js";
 
 const HintSchema = new mongoose.Schema({
     bar_start: {
@@ -58,13 +59,11 @@ const SectionSchema = new mongoose.Schema({
         enum: ["Drums", "Vocals", "Guitars", "Keyboard", "Bass"],
     },
 })
-
 const TrackMetadataSchema = new mongoose.Schema({
     sections: [SectionSchema],
     tempo: Number,
     time_signature: String
 })
-
 const TrackSchema = new mongoose.Schema({
     audio : {
         type: mongoose.Schema.Types.ObjectId,
@@ -125,21 +124,6 @@ function validatePost(track) {
 function validatePut(track) {
     const schema = makeSchemaFieldsOptional(trackSchema);
     return schema.validate(track, {allowUnknown: true});
-}
-
-function makeSchemaFieldsOptional( schema ){
-    if (schema.describe().type === 'object')
-        return schema.fork( Object.keys(schema.describe().keys), makeSchemaFieldsOptional );
-    if (schema.describe().type === 'array'){
-        const innerFields = schema["$_terms"].items
-
-        //ALTER EVERY FIELD
-        const newSchemas = innerFields.map( makeSchemaFieldsOptional );
-
-        //RETURNS A NEW ARRAY SCHEMA
-        return Joi.array().items(...newSchemas);
-    }
-    return schema.optional();
 }
 
 export {

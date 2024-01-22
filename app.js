@@ -12,7 +12,7 @@ import configure from './startup/config.js'
 import logging from './startup/logging.js'
 import routes from './startup/routes.js'
 import database from './startup/db.js'
-import customValidation from "./startup/validation.js"
+import joiUtils from "./startup/validation.js"
 
 // SAFECHECK CONFIGURACIONES NECESARIAS
 configure();
@@ -33,7 +33,7 @@ app.use(cors());
 logging();
 routes(app);
 database();
-customValidation();
+joiUtils();
 
 app.listen(config.get("port"), () => {
   winston.info(`App listening on port ${config.get("port")}`);
