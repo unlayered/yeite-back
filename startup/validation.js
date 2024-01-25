@@ -1,7 +1,7 @@
 import Joi from "joi";
 import objectId from "joi-objectid";
 
-export default function () {
+export function addObjectIdValidator() {
   Joi.objectId = objectId(Joi);
 };
 
@@ -19,3 +19,8 @@ export function makeSchemaFieldsOptional( schema ){
   }
   return schema.optional();
 }
+
+export const paginationSchema = Joi.object({
+  page : Joi.number().min(0),
+  limit: Joi.number().min(0).max(100)
+})

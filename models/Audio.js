@@ -37,10 +37,13 @@ const AudioSchema = new mongoose.Schema({
   author : {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
+  },
+  extension: {
+    type: String,
   }
 });
 
-const Audio = mongoose.model("audios", AudioSchema);
+const AudioModel = mongoose.model("audios", AudioSchema);
 
 function validate(audio) {
 
@@ -54,12 +57,14 @@ function validate(audio) {
     url: Joi.string().dataUri().min(5).max(255),
     stems: Joi.array().items( stemSchema ),
     bpm: Joi.number().min(0),
+    extension: Joi.string().valid('mp3', 'wav', 'm4a'),
   });
-  return audioSchema.validate(audio);
+
+  return audioSchema.validate(audio, {allowUnknown : true});
 }
 
 export {
   validate,
   AudioSchema,
-  Audio
+  AudioModel
 }

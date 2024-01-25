@@ -1,4 +1,3 @@
-import config from "config";
 import winston from "winston";
 import "express-async-errors";
 import "winston-mongodb";

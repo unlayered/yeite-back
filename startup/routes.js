@@ -9,11 +9,15 @@ import stem from "../routes/stem.js";
 import split from "../routes/split.js";
 
 import errorLogs from "../middleware/error.js";
+import paginate from "../middleware/paginate.js";
 
 export default function (app) {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.static("public"));
+
+  // PAGINATION
+  app.use(paginate);
 
   app.use("/api/users", users);
   app.use("/api/audio", audio);
@@ -22,6 +26,7 @@ export default function (app) {
   app.use("/api/stem", stem);
   app.use("/api/split", split);
   //app.use("/split", split);
+
 
   /* ERROR HANDLING MIDDLEWARE*/
   app.use(errorLogs);

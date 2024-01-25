@@ -3,5 +3,8 @@
     "jwtPrivateKey": "YEITE_JWT_PRIVATE_KEY",
     "port":"PORT",
     "inputPath": "YEITE_INPUT_PATH",
-    "outputPath": "YEITE_OUTPUT_PATH"
+    "outputPath": "YEITE_OUTPUT_PATH",
+    "s3-uri" : "YEITE_FILES_URI",
+    "s3-id" : "YEITE_FILES_ID",
+    "s3-secret" : "YEITE_FILES_SECRET"
 }
