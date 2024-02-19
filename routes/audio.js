@@ -29,7 +29,7 @@ router.get("/:id", async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id))
     return res.status(400).send('The id is invalid.')
   const audio = await AudioModel.findById( req.params.id ).populate('author', ['-password', '-isAdmin']);
-  if (!audio) return res.status(404).send("The user was not found");
+  if (!audio) return res.status(404).send("The audio was not found");
   res.send(audio);
 });
 
@@ -37,7 +37,7 @@ router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const uploadUrl = await s3.generateUploadURL(crypto.randomBytes(32).toString('hex') , 'audio', 'yeite-original-audio');
+  const uploadUrl = await s3.generateUploadURL(crypto.randomBytes(12).toString('hex') , 'audio', 'yeite-original-audio');
 
   const getUrl = uploadUrl.split('?')[0];
 
