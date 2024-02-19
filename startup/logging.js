@@ -1,9 +1,8 @@
-const config = require("config");
-const winston = require("winston");
-require("express-async-errors");
-require("winston-mongodb");
+import winston from "winston";
+import "express-async-errors";
+import "winston-mongodb";
 
-module.exports = function () {
+export default function () {
   winston.add(new winston.transports.File({ filename: "logfile.log" }));
   winston.add(
     new winston.transports.Console({ colorize: true, prettyPrint: true })

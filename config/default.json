@@ -1,7 +1,5 @@
 {
-    "name": "Vidly",
+    "name": "Yeite",
     "jwtPrivateKey":"",
-    "port" : "",
-    "inputPath": "",
-    "outputPath": ""
+    "port" : ""
 }

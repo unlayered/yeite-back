@@ -1,14 +1,16 @@
-const config = require("config");
-const path = require("path");
+import config from "config";
+import debug from 'debug'
+debug("app:startup");
 
-module.exports = function () {
-  if (!config.get("jwtPrivateKey")) {
-    throw new Error("FATAL ERROR: jwtPrivateKey is not defined.");
-  }
-  if (!config.get("inputPath")) {
-    throw new Error("FATAL ERROR: inputPath is not defined.");
-  }
-  if (!config.get("outputPath")) {
-    throw new Error("FATAL ERROR: outputPath is not defined.");
-  }
-};
+export default function configure () {
+
+    const requiredVariables = ["jwtPrivateKey", "databaseUri", "splitHost"];
+
+    requiredVariables.forEach( variable => {
+        
+        if (!config.get(variable)) {
+            throw new Error(`FATAL ERROR: ${variable} is not defined.`);
+          }
+    })
+  };
+  

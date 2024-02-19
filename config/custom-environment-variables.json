@@ -1,7 +1,12 @@
 {
-    "database-uri": "DATABASE_URI",
-    "jwtPrivateKey": "VIDLY_JWT_PRIVATE_KEY",
+    "databaseUri": "YEITE_DATABASE_URI",
+    "jwtPrivateKey": "YEITE_JWT_PRIVATE_KEY",
+
     "port":"PORT",
-    "inputPath": "AUDIO_INPUT_PATH",
-    "outputPath": "AUDIO_OUTPUT_PATH"
+
+    "splitHost" : "YEITE_SPLIT_HOST", 
+
+    "s3-uri" : "YEITE_FILES_URI",
+    "s3-id" : "YEITE_FILES_ID",
+    "s3-secret" : "YEITE_FILES_SECRET"
 }

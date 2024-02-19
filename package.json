@@ -1,18 +1,22 @@
 {
-  "name": "vidly",
+  "name": "yeite",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "app.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1542.0",
+    "axios": "^1.6.7",
     "bcrypt": "^5.0.1",
     "config": "^3.3.7",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "debug": "^4.3.4",
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
@@ -25,6 +29,5 @@
     "multer": "^1.4.5-lts.1",
     "winston": "^3.7.2",
     "winston-mongodb": "^5.0.7"
-  },
-  "devDependencies": {}
+  }
 }

@@ -1,15 +1,16 @@
-const _ = require("lodash");
-const Joi = require("joi");
-const bcrypt = require("bcrypt");
-const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
-const { User } = require("../models/User.js");
+import _ from "lodash";
+import Joi from "joi";
+import bcrypt from "bcrypt";
+import express from "express";
+import { User } from "../models/User.js";
 
-const debug = require("debug")("app:auth");
+import debug from "debug";
+debug("app:auth");
+
+const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { error } = validate(req.body);
+  const { error } = validateLogin(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const user = await User.findOne({ email: req.body.email });
@@ -19,10 +20,10 @@ router.post("/", async (req, res) => {
   if (!validPassword) return res.status(400).send("Invalid email or password");
 
   const token = user.generateAuthToken();
-  res.send(token);
+  res.send({ "auth-token" : token });
 });
 
-function validate(req) {
+function validateLogin(req) {
   const schema = Joi.object({
     email: Joi.string().email().min(5).max(255).required(),
     password: Joi.string().min(5).max(255).required(),
@@ -30,4 +31,5 @@ function validate(req) {
   return schema.validate(req);
 }
 
-module.exports = router;
+
+export default router;
