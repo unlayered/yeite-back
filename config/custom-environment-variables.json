@@ -1,6 +1,6 @@
 {
     "databaseUri": "YEITE_DATABASE_URI",
-    "jwtPrivateKey": "YEITE_JWT_PRIVATE_KEY",
+    "jwtPrivateKey": "JWT_PRIVATE_KEY",
 
     "port":"PORT",
 

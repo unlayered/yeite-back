@@ -17,9 +17,10 @@ router.get('/', auth, async (req,res) => {
   res.status(200).send({ total: splits.length, items: splits });
 })
 
-router.post('/test', async(req,res) => {
-  const contents =  req.body.success;
-  console.log(contents);
+router.post('/status', async(req,res) => {
+  const {status, success, message} =  req.body;
+  console.log( _.pick( req.body, ['status', 'success', 'message']))
+
   res.status(200).send('OK')
 })
 

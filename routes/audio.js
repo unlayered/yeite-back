@@ -37,14 +37,14 @@ router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const uploadUrl = await s3.generateUploadURL(crypto.randomBytes(12).toString('hex') , 'audio', 'yeite-original-audio');
-
-  const getUrl = uploadUrl.split('?')[0];
-
   const audio = new AudioModel(
-    { ..._.pick(req.body, ["name", "stems", "bpm", "extension"]), url: getUrl }
+    { ..._.pick(req.body, ["name", "stems", "bpm", "extension"])}
   )
 
+  const path = `${audio._id}/${crypto.randomBytes(6).toString('hex')}.${audio.extension}`;
+  const uploadUrl = await s3.generateUploadURL( path, 'audio', 'yeite-original-audio' );
+
+  audio.url = uploadUrl.split('?')[0];
   audio.author = req.user._id;
   await audio.save();
 
