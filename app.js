@@ -10,27 +10,15 @@ import routes from './startup/routes.js'
 import database from './startup/db.js'
 import { addObjectIdValidator } from "./startup/validation.js"
 
-// SAFECHECK CONFIGURACIONES NECESARIAS
 configure();
 
 const app = express();
-
-// app.use(
-//   "/output",
-//   express.static(config.get("outputPath"), {
-//     setHeaders: function (res, path, stat) {
-//       res.set("Access-Control-Allow-Origin", "*");
-//     },
-//   })
-// );
-
 app.use(cors());
 
 logging();
 routes(app);
 database();
 addObjectIdValidator();
-
 
 app.listen(config.get("port"), () => {
   winston.info(`App listening on port ${config.get("port")}`);
