@@ -6,9 +6,6 @@ import { SplitModel, validate } from "../models/Split.js";
 import { AudioModel } from "../models/Audio.js";
 
 import axios from 'axios'
-import config from 'config'
-
-import http from 'http';
 
 const router = express.Router();
 
@@ -18,10 +15,35 @@ router.get('/', auth, async (req,res) => {
 })
 
 router.post('/status', async(req,res) => {
-  const {status, success, message} =  req.body;
-  console.log( _.pick( req.body, ['status', 'success', 'message']))
+  const { success, result } = req.body;
 
-  res.status(200).send('OK')
+  const { split_job, status, stems } = result;
+
+  const split = await SplitModel.findById(split_job);
+  split.status = status;
+  await split.save();
+
+  if (success){
+    const audio = await AudioModel.findByIdAndUpdate( split.audio );
+    const stemList = stems.map( url => {
+      
+      const layer = url
+        .split("/")
+        .pop() //KEEP THE FILENAME + EXTENSION
+        .replace( /.*_/g, "") //DROP ANYTHING BEFORE LOW DASH
+        .replace( /\..{1,5}$/g, "") //DROP EXTENSION
+
+      return {
+        url : url,
+        //layer: layer
+      }
+    });
+
+    audio.stems = stemList;
+    await audio.save();  
+  }
+  
+  res.status(200);
 })
 
 router.get('/:id', auth, async (req,res) => {
@@ -49,22 +71,24 @@ router.post('/', auth, async (req,res) => {
 
   split.audio = audio._id;
   split.user = req.user._id;
-  await split.save();
 
   try {
     const { data } = await axios.post( 'http://192.168.0.198:3001/split', {
+      split_job: split._id,
       fileUrl: audio.url,
       stems: stems,
       bitrate: bitrate,
       codec: codec
     })
-
+    
     console.log(data)
+    await split.save();
+
   } catch (err){
     res.status(500).send(err.message)
   }
 
-  res.status(200).send(split)
+  res.status(202).send(split)
 })
 
 router.delete('/:id', auth, async (req,res) => {
