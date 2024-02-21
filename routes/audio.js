@@ -1,4 +1,5 @@
 import auth from "../middleware/auth.js";
+import admin from "../middleware/admin.js";
 import _ from "lodash";
 import express from "express";
 import crypto from "crypto";
@@ -12,7 +13,7 @@ debug("app:users");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", [auth, admin], async (req, res) => {
   const {page = 1, limit = 10} = req.query;
   const audios = await getAudios( page, limit );
 
